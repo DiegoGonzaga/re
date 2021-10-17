@@ -1,0 +1,225 @@
+openapi: 3.0.0
+info:
+  description: "Library of media."
+  version: "1.0.0"
+  title: "Vreledee Library"
+  # termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "diego-gonzaga@live.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+servers:
+  - url: "http://localhost:3000"
+tags:
+  - name: "user"
+    description: "Info about users"
+  - name: "media"
+    description: "Info about medias. Example: books, moovies, manga, etc..."
+
+paths:
+  /users:
+    get:
+      tags:
+        - "user"
+      summary: "Get all users"
+      description: ""
+      security:
+        - Bearer: []
+      responses:
+        200:
+          description: "A list of all users"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/user"
+    post:
+      tags:
+        - "user"
+      summary: ""
+      description: ""
+      responses:
+        201:
+          description: "Insert a new user."
+          content:
+            application/json:
+              schema:
+                #type: "object"
+                #items:
+                $ref: "#/components/schemas/newItem"
+
+  /media:
+    get:
+      tags:
+        - "media"
+      summary: "Get all media"
+      description: ""
+      responses:
+        200:
+          description: "A list of all users"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/media"
+    post:
+      tags:
+        - "media"
+      summary: ""
+      description: ""
+      responses:
+        201:
+          description: "Insert a new media"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/newItem"
+  /type-media:
+    get:
+      tags:
+        - "media"
+      summary: "Get all types of media"
+      description: ""
+      responses:
+        200:
+          description: "A list of all types of media"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/typeMedia"
+    post:
+      tags:
+        - "media"
+      summary: ""
+      description: ""
+      responses:
+        201:
+          description: "Insert a new media"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/newItem"
+  /login:
+    post:
+      requestBody:
+        description: ""
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/loginPostBody"
+
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/loginPostResponse"
+        401:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/errorUnauthorized"
+components:
+  schemas:
+    user:
+      type: "object"
+      properties:
+        _id:
+          type: "string"
+        name:
+          type: "string"
+        surname:
+          type: "string"
+        birthday:
+          type: "integer"
+      example:
+        _id: "616c9b54988ac980402273a6"
+        name: "Maria"
+        surname: "Silva"
+        birthday: 971822048
+    newItem:
+      type: "object"
+      properties:
+        _id:
+          type: "string"
+      example:
+        _id: "616ca9438819c09e12540e85"
+    media:
+      type: "object"
+      properties:
+        _id:
+          type: "string"
+        name:
+          type: "string"
+        type_media_id:
+          type: "string"
+        chapterEpisode:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/chapterEpisode"
+      example:
+        _id: "616ca973fec9ae4a2939a252"
+        name: "One Piece"
+        type_media_id: "616ca321958a32aedb5c0a00"
+        chapterEpisode:
+          - name: " ROMANCE DAWN - O Alvorecer do Romance"
+            number: "1"
+            readAt: 1602974048
+
+    typeMedia:
+      type: "object"
+      properties:
+        _id:
+          type: "string"
+        name:
+          type: "string"
+      example:
+        _id: "616ca321958a32aedb5c0a00"
+        name: "Mangá"
+    chapterEpisode:
+      properties:
+        name:
+          type: "string"
+        number:
+          type: "string"
+        readAt:
+          type: "integer"
+
+    loginPostBody:
+      properties:
+        username:
+          type: "string"
+        password:
+          type: "string"
+      required:
+        - username
+        - password
+      example:
+        username: "xinma"
+        password: "IRj1xN:i9UkW"
+    loginPostResponse:
+      properties:
+        token:
+          type: "string"
+      example:
+        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+    errorUnauthorized:
+      properties:
+        error:
+          type: "string"
+      example:
+        error: "Username and/or password are/is incorrect."
+
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

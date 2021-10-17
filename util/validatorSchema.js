@@ -11,8 +11,9 @@ const v = new Validator();
  */
 const validate = (instance, schema) => {
   let response = v.validate(instance, schema, {
-    allowUnknownAttributes: false,
+    // allowUnknownAttributes: false,
   });
+  console.log(response);
   if (!response.valid) return [400, response.errors];
   return [200, false];
 };
